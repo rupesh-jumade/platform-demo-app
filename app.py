@@ -7,7 +7,7 @@ app = Flask(__name__)
 @app.route("/")
 def home():
     return {
-        "message": "Platform Demo App"
+        "message": "Platform Demo App v2"
     }
 
 
