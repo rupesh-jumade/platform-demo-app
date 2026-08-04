@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+
+kind: Ingress
+
+metadata:
+  name: platform-demo-ingress
+
+spec:
+  ingressClassName: nginx
+
+  rules:
+    - http:
+        paths:
+
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: platform-demo-service
+                port:
+                  number: 80
+
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: api-demo-service
+                port:
+                  number: 80
