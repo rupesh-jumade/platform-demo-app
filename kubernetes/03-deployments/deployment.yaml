@@ -23,3 +23,17 @@ spec:
 
         ports:
         - containerPort: 80
+
+        envFrom:
+        - configMapRef:
+            name: platform-demo-config
+
+        volumeMounts:
+        - name: nginx-config-volume
+          mountPath: /etc/nginx/conf.d/demo.conf
+          subPath: demo.conf
+
+      volumes:
+      - name: nginx-config-volume
+        configMap:
+          name: nginx-config

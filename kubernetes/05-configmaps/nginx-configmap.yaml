@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+data:
+  demo.conf: |
+    server {
+        listen 8080;
+
+        location / {
+            return 200 "ConfigMap UPDATED successfully\n";
+        }
+    }
