@@ -27,13 +27,29 @@ spec:
         envFrom:
         - configMapRef:
             name: platform-demo-config
+        - secretRef:
+            name: platform-demo-secret
+
+        env:
+        - name: DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: platform-demo-secret
+              key: DATABASE_PASSWORD
 
         volumeMounts:
         - name: nginx-config-volume
           mountPath: /etc/nginx/conf.d/demo.conf
           subPath: demo.conf
 
+        - name: app-secret-volume
+          mountPath: /etc/app-secret
+          readOnly: true
+
       volumes:
       - name: nginx-config-volume
         configMap:
           name: nginx-config
+      - name: app-secret-volume
+        secret:
+          secretName: app-secret-file
