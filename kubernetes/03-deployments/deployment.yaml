@@ -46,6 +46,12 @@ spec:
           mountPath: /etc/app-secret
           readOnly: true
 
+        - name: temporary-data
+          mountPath: /tmp/demo
+
+        - name: persistent-data
+          mountPath: /var/lib/demo-data
+
       volumes:
       - name: nginx-config-volume
         configMap:
@@ -53,3 +59,9 @@ spec:
       - name: app-secret-volume
         secret:
           secretName: app-secret-file
+      - name: temporary-data
+        emptyDir: {}
+      - name: persistent-data
+        persistentVolumeClaim:
+          claimName: platform-demo-pvc
+
