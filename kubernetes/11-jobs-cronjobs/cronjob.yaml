@@ -1,0 +1,32 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: platform-demo-cronjob
+spec:
+  schedule: "*/2 * * * *"
+
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+
+      template:
+        metadata:
+          labels:
+            app: platform-demo-cronjob
+
+        spec:
+          restartPolicy: Never
+
+          containers:
+            - name: scheduled-task
+              image: busybox:1.36
+              command:
+                - sh
+                - -c
+                - |
+                  echo "Scheduled maintenance task started"
+                  date
+                  echo "Scheduled maintenance task completed"

@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: platform-demo-failing-job
+spec:
+  backoffLimit: 2
+
+  template:
+    metadata:
+      labels:
+        app: platform-demo-failing-job
+
+    spec:
+      restartPolicy: Never
+
+      containers:
+        - name: failing-task
+          image: busybox:1.36
+          command:
+            - sh
+            - -c
+            - |
+              echo "Starting failing task"
+              echo "Simulating failure"
+              exit 1
