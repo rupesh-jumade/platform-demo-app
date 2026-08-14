@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: node-agent
+spec:
+  selector:
+    matchLabels:
+      app: node-agent
+
+  template:
+    metadata:
+      labels:
+        app: node-agent
+
+    spec:
+      containers:
+        - name: node-agent
+          image: busybox:1.36
+          command:
+            - sh
+            - -c
+            - |
+              echo "Node agent started"
+              while true; do
+                echo "Node agent is running"
+                sleep 30
+              done
