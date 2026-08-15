@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: rbac-test
+spec:
+  serviceAccountName: platform-reader
+  containers:
+    - name: test
+      image: busybox:1.36
+      command:
+        - sh
+        - -c
+        - |
+          echo "RBAC test Pod running"
+          sleep 3600
