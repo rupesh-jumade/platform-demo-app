@@ -1,0 +1,5 @@
+replicaCount: 5
+
+image:
+  repository: nginx
+  tag: latest

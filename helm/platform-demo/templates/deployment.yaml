@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: platform-demo-helm-deployment
+
+spec:
+  replicas: {{ .Values.replicaCount }}
+
+  selector:
+    matchLabels:
+      app: nginx-deployment
+
+  template:
+    metadata:
+      labels:
+        app: nginx-deployment
+
+    spec:
+      containers:
+        - name: nginx
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+
+          ports:
+            - containerPort: 80
+
+          envFrom:
+            - configMapRef:
+                name: platform-demo-config
+            - secretRef:
+                name: platform-demo-secret
+
+          env:
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: platform-demo-secret
+                  key: DATABASE_PASSWORD
+
+          volumeMounts:
+            - name: nginx-config-volume
+              mountPath: /etc/nginx/conf.d/demo.conf
+              subPath: demo.conf
+
+            - name: app-secret-volume
+              mountPath: /etc/app-secret
+              readOnly: true
+
+            - name: temporary-data
+              mountPath: /tmp/demo
+
+            - name: persistent-data
+              mountPath: /var/lib/demo-data
+
+      volumes:
+        - name: nginx-config-volume
+          configMap:
+            name: nginx-config
+
+        - name: app-secret-volume
+          secret:
+            secretName: app-secret-file
+
+        - name: temporary-data
+          emptyDir: {}
+
+        - name: persistent-data
+          persistentVolumeClaim:
+            claimName: platform-demo-pvc

@@ -1,0 +1,5 @@
+apiVersion: v2
+name: platform-demo
+description: Helm chart for the platform demo application
+type: application
+version: 0.1.0
