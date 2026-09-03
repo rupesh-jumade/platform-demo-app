@@ -1,4 +1,4 @@
-name: CI
+name: CI/CD
 
 on:
   push:
@@ -34,3 +34,36 @@ jobs:
 
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/platform-demo-app:${{ github.sha }}
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: ci
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create Kubernetes cluster
+        uses: helm/kind-action@v1
+        with:
+          cluster_name: cicd-cluster
+
+      - name: Deploy application
+        run: |
+          sed -i "s|IMAGE_PLACEHOLDER|${{ secrets.DOCKERHUB_USERNAME }}/platform-demo-app:${{ github.sha }}|g" \
+            kubernetes/14-production/cicd/cicd-deployment.yaml
+
+          kubectl apply -f kubernetes/14-production/cicd/cicd-deployment.yaml
+          kubectl apply -f kubernetes/14-production/cicd/cicd-service.yaml
+
+      - name: Verify deployment
+        run: |
+          kubectl rollout status deployment/platform-demo-app --timeout=120s
+          kubectl get pods
+          kubectl get service platform-demo-app-service
+
+      - name: Smoke test application
+        run: |
+          kubectl port-forward service/platform-demo-app-service 8080:80 >/tmp/port-forward.log 2>&1 &
+          sleep 5
+          curl --fail http://127.0.0.1:8080/health
