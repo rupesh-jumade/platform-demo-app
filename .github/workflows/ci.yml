@@ -24,4 +24,13 @@ jobs:
         run: python -m pytest -v
 
       - name: Build Docker image
-        run: docker build -t platform-demo-app:${{ github.sha }} .
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/platform-demo-app:${{ github.sha }} .
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Push Docker image
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/platform-demo-app:${{ github.sha }}
