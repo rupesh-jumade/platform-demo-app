@@ -1,6 +1,6 @@
 # Platform Demo App
 
-Platform Engineering project demonstrating containerization, Kubernetes deployment, AWS infrastructure, Terraform, and CI/CD automation.
+A hands-on Platform Engineering project demonstrating how a Python application is containerized, tested through CI/CD, deployed to Kubernetes, and supported with Infrastructure as Code using Terraform and AWS.
 
 ## Technologies
 
