@@ -1,2 +1,2 @@
 # platform-demo-app
-Platform Engineering learning project evolving from Flask to Docker, Kubernetes, AWS, Terraform and CI/CD.
+Platform Engineering project demonstrating containerization, Kubernetes deployment, AWS infrastructure, Terraform and CI/CD automation.
